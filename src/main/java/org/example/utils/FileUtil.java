@@ -11,18 +11,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FileUtil {
 
     private FileUtil(){
     }
-
     public static List<Ticket> readFile() {
-        File file = new File("data/tickets.json");
+        File file = new File("tickets.json");
         try (FileReader reader = new FileReader(file)) {
             Type itemsMapType = new TypeToken<Map<String, List<Ticket>>>() {
             }.getType();
