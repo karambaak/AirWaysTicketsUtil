@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class App {
-    private List<Ticket> tickets;
+    private final List<Ticket> tickets;
 
     public App() {
         this.tickets = FileUtil.readFile();
@@ -33,12 +33,13 @@ public class App {
     }
 
     private Map<String, Long> getMinTimeForEveryAirTransfer() {
-        return tickets.stream()
+        var someResult = tickets.stream()
                 .filter(e -> e.getDestination().equals("TLV") && e.getOrigin().equals("VVO"))
                 .collect(Collectors.groupingBy(Ticket::getCarrier,
                         Collectors.minBy(Comparator.comparing(Ticket::getTimeInAir)))
-                )
-                .entrySet().stream()
+                );
+
+        return someResult.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue()
                         .map(Ticket::getTimeInAir).orElse(0L)));
     }
