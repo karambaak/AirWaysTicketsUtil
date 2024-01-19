@@ -28,7 +28,7 @@
                     <finalName>
                         airWaysApp
                     </finalName>
-                    <outputDirectory>./</outputDirectory>
+                    <outputDirectory>../</outputDirectory>
                     <archive>
                         <manifest>
                             <mainClass>org.example.Main</mainClass>
