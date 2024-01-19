@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class App {
     private final List<Ticket> tickets;
+    private static final String VVO = "VVO";
+    private static final String TLV = "TLV";
+
 
     public App() {
         this.tickets = FileUtil.readFile();
@@ -34,7 +37,7 @@ public class App {
 
     private Map<String, Long> getMinTimeForEveryAirTransfer() {
         var someResult = tickets.stream()
-                .filter(e -> e.getDestination().equals("TLV") && e.getOrigin().equals("VVO"))
+                .filter(e -> e.getDestination().equals(TLV) && e.getOrigin().equals(VVO))
                 .collect(Collectors.groupingBy(Ticket::getCarrier,
                         Collectors.minBy(Comparator.comparing(Ticket::getTimeInAir)))
                 );
@@ -49,18 +52,21 @@ public class App {
     }
 
     private double getAveragePrice() {
-        double sum = tickets.stream()
-                .filter(e -> e.getDestination().equals("TLV") && e.getOrigin().equals("VVO"))
+        var selectionFromTickets = tickets.stream()
+                .filter(e -> e.getDestination().equals(TLV) && e.getOrigin().equals(VVO))
+                .toList();
+        double sum = selectionFromTickets.stream()
                 .mapToDouble(Ticket::getPrice)
                 .sum();
-        return sum / tickets.size();
+        return sum / selectionFromTickets.size();
     }
 
     private double getMedian() {
         List<Integer> prices = tickets.stream()
-                .filter(e -> e.getDestination().equals("TLV") && e.getOrigin().equals("VVO"))
+                .filter(e -> e.getDestination().equals(TLV) && e.getOrigin().equals(VVO))
                 .map(Ticket::getPrice)
-                .sorted().toList();
+                .sorted(Integer::compare)
+                .toList();
         int size = prices.size();
         return prices.size() % 2 == 0 ?
                 (double) (prices.get(size / 2 - 1) + prices.get(size / 2)) / 2 :
